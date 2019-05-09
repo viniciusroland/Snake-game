@@ -1,4 +1,4 @@
-class Food {
+  class Food {
   constructor(start_position) {
     this.pos = start_position
   }

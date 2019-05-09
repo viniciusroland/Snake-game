@@ -27,11 +27,16 @@ function draw() {
   //shows the snake
   snake.show()
 
+  //checks for food to eat
+  snake.eat(food)
+
+  //ai
+  //think about the next move
+  snake.think_move(food)
+
   //checks for deaths
   snake.death()
 
-  //checks for food to eat
-  snake.eat(food)
 
   //checks for arrow keys to move the snake
   keyPressed()
