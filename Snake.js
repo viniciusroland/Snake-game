@@ -7,7 +7,6 @@ class Snake {
 
   show() {
     fill(255)
-    //rect(this.head.x, this.head.y, piece, piece)
     rect(this.head.x, this.head.y, piece, piece)
     for(let i = 0; i < this.len; i++) {
       rect(this.body[i].x, this.body[i].y, piece, piece)
@@ -24,6 +23,7 @@ class Snake {
 
       }
     }
+
     this.body[this.len - 1] = createVector(this.head.x, this.head.y)
 
     if(axis === 'X') {
@@ -38,6 +38,7 @@ class Snake {
     if(this.head.x == food.pos.x && this.head.y == food.pos.y) {
       food.generate()
       this.len++
+      console.warn(this.len)
     }
 
   }
@@ -46,6 +47,7 @@ class Snake {
     for(let i = 0; i < this.len; i++) {
       if(this.head.x == this.body[i].x && this.head.y == this.body[i].y) {
         this.len = 0
+        this.body = []
         alert('morreu otario')
       }
     }
@@ -59,12 +61,41 @@ class Snake {
     //1. tendo velocidade positiva no eixo x (indo para a direita), checamos:
     //
     //1.a. se a food esta a direita (y > yh)
+    //
+    //novas posicoes
+    let nextpx = this.head.x + velocity
+    let nextpy = this.head.y + velocity
+
     if(food.pos.y > this.head.y) {
-      this.move('Y', 1)
+      let there_is_piece = false
+      for(let part of this.body) {
+        if(this.head.y + piece == part.y && this.head.x == part.x) {
+          there_is_piece = true
+        }
+        
+
+      }
+      if(!there_is_piece) {
+        this.move('Y', 1)
+      } else {
+        this.move('Y', -1)
+      }
     }
     //1.b. se a food esta a esquerda (y < yh)
     if(food.pos.y < this.head.y) {
-      this.move('Y', -1)
+      let there_is_piece = false
+      for(let part of this.body) {
+        if(this.head.y - piece == part.y && this.head.x == part.x) {
+          there_is_piece = true
+        }
+        
+
+      }
+      if(!there_is_piece) {
+        this.move('Y', -1)
+      } else {
+        this.move('Y', 1)
+      }
     }
     //e fazemos o movimento correspondente
     //
@@ -72,49 +103,53 @@ class Snake {
     //
     //2.a. se a food esta a direta(x < xh)
     if(food.pos.x < this.head.x) {
-      this.move('X', -1)
+      let there_is_piece = false
+      for(let part of this.body) {
+        if(this.head.x - piece == part.x && this.head.y == part.y) {
+          there_is_piece = true
+        }
+        
+
+      }
+      if(!there_is_piece) {
+        this.move('X', -1)
+      } else {
+        this.move('X', 1)
+
+      }
     }
+
     //2.b. se a food esta a esquerda(x > xh)
     if(food.pos.x > this.head.x) {
-      this.move('X', 1)
+      let there_is_piece = false
+      for(let part of this.body) {
+        if(this.head.x + piece == part.x && this.head.y == part.y) {
+          there_is_piece = true
+        }
+        
+
+      }
+      if(!there_is_piece) {
+        this.move('X', 1)
+      } else {
+        this.move('X', -1)
+      }
     }
+
+
     //e fazemos o movimento correspondente
     //
     //3. verificar se o movimento colidira com alguma parede, ou seja:
     //
     //yh + 1 >= window.height
-    if(this.head.y + piece >= h) {
-      this.move('X', -1)
-    }
     //xh + 1 >= window.width
-    if(this.head.x + piece >= w) {
-      this.move('Y', 1)
-    }
     //
     //4. verificar se o movimento colidira com alguma parte do corpo, ou seja:
     //
-    //xh + 1 == body[i].x
-    //yh + 1 == body[i].y
+    //xh + velocity == body[i].x
+    //yh + velocity == body[i].y
     //
     //5. caso esteja na mesma linha da velocidade apenas continue se movendo.
   }
 }
 
-function keyPressed() {
-  if(keyCode === LEFT_ARROW && prev != RIGHT_ARROW) {
-    prev = LEFT_ARROW
-    snake.move('X', -1)
-  }
-  if(keyCode === RIGHT_ARROW && prev != LEFT_ARROW) {
-    prev = RIGHT_ARROW
-    snake.move('X', 1)
-  }
-  if(keyCode === UP_ARROW && prev != DOWN_ARROW) {
-    prev = UP_ARROW
-    snake.move('Y', -1)
-  }
-  if(keyCode === DOWN_ARROW && prev != UP_ARROW) {
-    prev = DOWN_ARROW
-    snake.move('Y', 1)
-  }
-}
